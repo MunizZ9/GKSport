@@ -1,6 +1,6 @@
 package com.example.security.controllers;
 
-import com.example.security.models.Usuario;
+import com.example.security.models.usuario.Usuario;
 import com.example.security.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
