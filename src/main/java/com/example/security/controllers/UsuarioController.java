@@ -23,6 +23,14 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     // Listar todos os usuarios
+    @Operation(summary = "Busca os dados de todos os usuarios", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos dados"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado")
+    })
     @GetMapping("/")
     public ResponseEntity<List<Usuario>> listarUsuario() {
         List<Usuario> usuarios = usuarioService.listarTodosUsuario();
@@ -36,6 +44,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos dados"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado")
     })
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obterUsuarioPorId(@PathVariable Long id) {
@@ -47,8 +56,8 @@ public class UsuarioController {
         }
     }
 
-    // Adicionar uma camisa existente
-    @Operation(summary = "Realiza o upload de arquivos", method = "POST")
+    // Adicionar um usuario
+    @Operation(summary = "Adiona um usuario", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Upload de arquivos realizado com sucesso"),
             @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
@@ -61,7 +70,15 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
     }
 
-    // Atualizar uma camisa existente
+    // Atualizar um usuario existente
+    @Operation(summary = "Atualiza um usuario existente pelo ID exercido", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos dados"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado) {
         Usuario usuario = usuarioService.obterUsuarioPorId(id);
@@ -74,7 +91,15 @@ public class UsuarioController {
         }
     }
 
-    // Excluir uma camisa pelo ID
+    // Excluir um usuario pelo ID
+    @Operation(summary = "Deleta um usuario pelo ID exercido", method = "DELETE")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos dados"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirUsuario(@PathVariable Long id) {
         Usuario usuario = usuarioService.obterUsuarioPorId(id);

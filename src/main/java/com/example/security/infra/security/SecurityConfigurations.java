@@ -1,5 +1,6 @@
 package com.example.security.infra.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,10 +12,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration // abilita a configuração do web security (ele ja vem configurado por padrão)
 @EnableWebSecurity // permite que eu declare o que vai ser configurado dentro da classe
 public class SecurityConfigurations {
+
+    @Autowired
+    SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -27,6 +32,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/usuario/").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

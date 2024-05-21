@@ -1,6 +1,8 @@
 package com.example.security.controllers;
 
+import com.example.security.infra.security.TokenService;
 import com.example.security.models.usuario.AuthenticationDTO;
+import com.example.security.models.usuario.LoginResponseDTO;
 import com.example.security.models.usuario.RegisterDTO;
 import com.example.security.models.usuario.Usuario;
 import com.example.security.repository.UsuarioRepositorio;
@@ -14,27 +16,31 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Repository
-@RequestMapping("auth")
+@RestController
+@RequestMapping("/auth")
 public class AutenticacaoController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){ // Faz a verificação da senha do usuario
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) { // Faz a verificação da senha do usuario
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.nome(), data.senha());
         var authentication = this.authenticationManager.authenticate(usernamePassword); // usa o BCryptPasswordEncoder para criptorgrafar a senha que ele receber por
-                                                                                        // parametro e compara com o Hash da senha que ja tem no banco de dados
+                                                                                       // parametro e compara com o Hash da senha que ja tem no banco de dados
+        var token = tokenService.generateToken((Usuario) authentication.getPrincipal());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
+    public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
         if (this.usuarioRepositorio.findByNome(data.nome()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
