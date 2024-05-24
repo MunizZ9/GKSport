@@ -32,7 +32,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Não encontrado")
     })
     @GetMapping("/")
-    public ResponseEntity<List<Usuario>> listarUsuario() {
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
         List<Usuario> usuarios = usuarioService.listarTodosUsuario();
         return ResponseEntity.ok(usuarios);
     }
