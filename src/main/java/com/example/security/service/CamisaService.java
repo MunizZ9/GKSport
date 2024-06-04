@@ -13,7 +13,7 @@ public class CamisaService {
     @Autowired
     private CamisaRepositorio camisaRepositorio;
 
-    // Listar todas as crianças
+    // Listar todas as camisas
     public List<Camisa> listarTodasCamisa() {
         return camisaRepositorio.findAll();
     }

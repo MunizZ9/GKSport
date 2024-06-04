@@ -1,13 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
-</head>
-<body>
-<h1>Erro</h1>
-<p>Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente mais tarde.</p>
-<h1>Deus me ajude</h1>
-</body>
-</html>
+package com.example.security.generator;
+
+import com.example.security.models.Camisa;
+import com.example.security.service.CamisaService;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.TextAlignment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.List;
+import java.util.Locale;
+
+@Component
+public class PdfGenerator {
+
+@Autowired
+private CamisaService camisaService;
+
+int count = 0;
+
+public byte[] generateOrcamentoPdf() throws IOException {
+List<Camisa> camisas = camisaService.listarTodasCamisa(); // Obtém todas as camisas do serviço
+
+    double valorTotal = 0;
+
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); // Cria um fluxo de saída de bytes
+
+    try (PdfWriter writer = new PdfWriter(outputStream);
+    PdfDocument pdfDocument = new PdfDocument(writer)) {
+
+    Document document = new Document(pdfDocument); // Cria um documento PDF
+
+    // Adiciona um título ao documento
+    Paragraph title = new Paragraph("Orçamento das camisas")
+    .setTextAlignment(TextAlignment.CENTER)
+    .setBold()
+    .setFontSize(20);
+
+
+    document.add(title);
+
+    document.add(new Paragraph(" "));
+
+    // Adiciona os detalhes das camisas ao documento
+    for (Camisa camisa : camisas) {
+    // Adiciona uma borda ao redor das informações da camisa
+    Paragraph camisaDetails = new Paragraph()
+    .add("ID: " + camisa.getId() + "\n")
+    .add("Tecido: " + camisa.getTecido() + "\n")
+    .add("Valor: " + camisa.getValor() + "\n")
+    .add("Tamanho: " + camisa.getTamanho() + "\n\n")
+    .setBorder(new SolidBorder(new DeviceRgb(0, 0, 0), 1)); // Define uma borda sólida de 1pt preta
+
+    document.add(camisaDetails);
+
+    valorTotal += camisa.getValor();
+    }
+
+
+    // Rodapé
+    Text rodape = new Text("----------------------------------------------------------------------------------------------------------------------").setFontColor(new DeviceRgb(255, 0, 0));
+    Paragraph footer = new Paragraph(rodape)
+    .setTextAlignment(TextAlignment.CENTER);
+    document.add(footer);
+
+    // Formata o valor total com duas casas decimais
+    DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+    symbols.setDecimalSeparator('.');
+    DecimalFormat df = new DecimalFormat("#.##", symbols);
+    String formattedTotal = df.format(valorTotal);
+
+    // Adiciona o valor total ao documento
+    Paragraph totalParagraph = new Paragraph("Valor Total: R$" + formattedTotal)
+    .setFontSize(14);
+    document.add(totalParagraph);
+
+
+    document.close();
+    }
+
+    return outputStream.toByteArray(); // Retorna o conteúdo do PDF como um array de bytes
+    }
+    }
