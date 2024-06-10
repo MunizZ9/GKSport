@@ -13,14 +13,17 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-
-public class Tecido {
+public class Orcamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
-    private String nomeTecido;
-    private String valor;
+    private String nome;
+    private String roupa;
+    private String tecido;
+    private int quantidade;
+    private String tamanho;
+    private int valor;
+
 }
