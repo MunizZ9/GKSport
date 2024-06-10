@@ -18,7 +18,7 @@ public class Camisa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String tecido;
+    private String nome;
     private double valor;
     private String tamanho;
 }

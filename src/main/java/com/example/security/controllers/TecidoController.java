@@ -18,7 +18,7 @@ public class TecidoController {
     private TecidoService tecidoService;
 
     //Listar todos os tecidos
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<Tecido>> listarUsuariosPorId() {
         List<Tecido> tecidos = tecidoService.listarTodosTecidos();
         return ResponseEntity.ok(tecidos);
@@ -34,7 +34,7 @@ public class TecidoController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<Tecido> adicionarTecido(@RequestBody Tecido tecido){
         Tecido novoTecido = tecidoService.atualizarTecido(tecido);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoTecido);

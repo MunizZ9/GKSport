@@ -21,6 +21,6 @@ public class Tecido {
 
     private Long id;
 
-    private String nomeTecido;
-    private String valor;
+    private String nome;
+    private double valor;
 }

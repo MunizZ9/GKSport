@@ -63,7 +63,7 @@ public class PdfGenerator {
             // Adiciona os detalhes das camisas à tabela
             for (Camisa camisa : camisas) {
                 table.addCell(createCell(String.valueOf(camisa.getId()), false));
-                table.addCell(createCell(camisa.getTecido(), false));
+                table.addCell(createCell(camisa.getNome(), false));
                 table.addCell(createCell(formatarValor(camisa.getValor()), false));
                 table.addCell(createCell(camisa.getTamanho(), false));
 
