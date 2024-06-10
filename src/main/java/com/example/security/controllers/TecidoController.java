@@ -36,7 +36,7 @@ public class TecidoController {
 
     @PostMapping("/")
     public ResponseEntity<Tecido> adicionarTecido(@RequestBody Tecido tecido){
-        Tecido novoTecido = tecidoService.atualizarTecido(tecido);
+        Tecido novoTecido = tecidoService.adicionarTecido(tecido);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoTecido);
     }
 
@@ -45,7 +45,7 @@ public class TecidoController {
         Tecido tecido = tecidoService.obterTecidoPorId(id);
         if (tecido != null){
             tecidoAtualizado.setId(id);
-            tecidoAtualizado = tecidoService.atualizarTecido(tecido);
+            tecidoAtualizado = tecidoService.atualizarTecido(tecidoAtualizado);
             return ResponseEntity.ok(tecidoAtualizado);
         } else {
             return ResponseEntity.notFound().build();
