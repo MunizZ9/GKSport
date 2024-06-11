@@ -24,7 +24,7 @@ public class PdfController {
     @Autowired
     private PdfGenerator pdfGenerator;
 
-    @GetMapping("/orcamento")
+    @GetMapping("/gerado")
     public ResponseEntity<byte[]> gerarOrcamentoPdf() {
         byte[] pdfData;
         try {

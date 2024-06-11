@@ -73,7 +73,7 @@ public class PdfGenerator {
             document.add(table);
 
             // Rodapé
-            Text rodape = new Text("----------------------------------------------------------------------------------------------------------------------").setFontColor(new DeviceRgb(255, 0, 0));
+            Text rodape = new Text("-----------------------------------------------").setFontColor(new DeviceRgb(255, 0, 0));
             Paragraph footer = new Paragraph(rodape)
                     .setTextAlignment(TextAlignment.CENTER);
             document.add(footer);
