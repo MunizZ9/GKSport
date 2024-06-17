@@ -30,6 +30,7 @@ public class PdfGenerator {
     public byte[] generateOrcamentoPdf() throws IOException {
         List<Camisa> camisas = camisaService.listarTodasCamisa(); // Obtém todas as camisas do serviço
 
+        int totalCamisa = 0;
         double valorTotal = 0;
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); // Cria um fluxo de saída de bytes
@@ -68,20 +69,25 @@ public class PdfGenerator {
                 table.addCell(createCell(camisa.getTamanho(), false));
 
                 valorTotal += camisa.getValor();
+                totalCamisa += 1;
             }
 
             document.add(table);
 
             // Rodapé
-            Text rodape = new Text("-----------------------------------------------").setFontColor(new DeviceRgb(255, 0, 0));
+            Text rodape = new Text("----------------------------------------------------------------------------------------------------------------------------------").setFontColor(new DeviceRgb(255, 0, 0));
             Paragraph footer = new Paragraph(rodape)
                     .setTextAlignment(TextAlignment.CENTER);
             document.add(footer);
 
             // Adiciona o valor total ao documento
-            Paragraph totalParagraph = new Paragraph("Valor Total: R$" + formatarValor(valorTotal))
+            Paragraph totalValorParagraph = new Paragraph("Valor Total: R$" + formatarValor(valorTotal))
                     .setFontSize(14);
-            document.add(totalParagraph);
+            document.add(totalValorParagraph);
+            // Adiciona o valor total ao documento
+            Paragraph totalCamisaParagraph = new Paragraph("Total de camisas: " + totalCamisa)
+                    .setFontSize(14);
+            document.add(totalCamisaParagraph);
 
             document.close();
         }
@@ -97,6 +103,9 @@ public class PdfGenerator {
     }
 
     private Cell createCell(String content, boolean isHeader) {
+        if (content == null) {
+            content = ""; // Define um conteúdo padrão caso o valor seja nulo
+        }
         Cell cell = new Cell().add(new Paragraph(content));
         if (isHeader) {
             cell.setBackgroundColor(new DeviceRgb(192, 192, 192));
