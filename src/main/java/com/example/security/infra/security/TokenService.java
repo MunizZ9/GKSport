@@ -22,7 +22,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);  // Recebe uma secret. A secret faz com que o hash seja unico na aplicação
             String token = JWT.create()
-                    .withIssuer("GKS-BACK")  // Quem foi o emissor do token
+                    .withIssuer("GK-BACK")  // Quem foi o emissor do token
                     .withSubject(usuario.getNome())  // Usuario que recebe o token
                     .withExpiresAt(genExpirationDate())  // Tempo que expira o token
                     .sign(algorithm); // Faz a assinatura e a geração final

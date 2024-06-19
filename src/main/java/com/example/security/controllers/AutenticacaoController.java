@@ -49,4 +49,5 @@ public class AutenticacaoController {
         this.usuarioRepositorio.save(novoUsuario);
         return ResponseEntity.ok().build();
     }
+
 }

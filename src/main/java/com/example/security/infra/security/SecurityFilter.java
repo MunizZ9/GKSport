@@ -25,16 +25,20 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException { // é o que roda no filterBefore
-        var token = this.recoverToken(request);                                                                                                              // pega o token e recupera as informações que estão dentro do token
+        var token = this.recoverToken(request);
+
         if (token != null) {
             var nome = tokenService.validateToken(token);
             UserDetails user = usuarioRepositorio.findByNome(nome);
 
-            var autenticacao = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(autenticacao); // fez a verificação e salvou no contexto da autenticacao o usuario, se caso não encontre o token
-                                                                               // ele não salva nada na sessão de autenticação e chama o proximo filtro dando um erro 403
+            if (user != null) {
+                var autenticacao = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(autenticacao);
+            }
         }
+
         filterChain.doFilter(request, response);
+
     }
 
     private String recoverToken(HttpServletRequest request) {

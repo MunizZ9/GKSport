@@ -1,5 +1,6 @@
 package com.example.security.models;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,13 +13,14 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-public class Camisa {
+
+public class Tecido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
     private String nome;
     private double valor;
-    private String tamanho;
 }
